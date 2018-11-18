@@ -1,0 +1,60 @@
+body {
+    color: #222;
+    font: normal 16px/24px "Roboto", sans-serif;
+}
+
+body, h1, h2, h3, h4, p, code, ul, ol, dl, dd, img {
+    margin: 0;
+}
+
+nav {
+    background: #29313D;
+    color: #4B6781;
+}
+
+a {
+    color: #1481B8;
+    text-decoration: none;
+    outline: none;
+    border-bottom: solid 1px rgba(222, 233, 237, 0);
+    transition: color 0.2s ease, border-color 0.4s ease;
+}
+
+nav a {
+    color: #7AA0B8;
+    font: 400 18px/24px "Roboto", sans-serif;
+    text-align: center;
+    text-decoration: none;
+    border-bottom: none;
+    margin: 0 0 0 24px;
+}
+
+nav.bar {
+    position: fixed;
+    width: 336px;
+    height: 100%;
+}
+
+nav.bar .contents {
+    margin: 24px 48px;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 6px 0 3px 0;
+    padding: 6px 0 4px 24px;
+    border-top: solid 1px #3B4B5E;
+    border-bottom: solid 1px #3B4B5E;
+}
+
+.page {
+    position: relative;
+    width: 912px;
+    margin: 0 auto 0 384px;
+}
+
+.page h1 {
+    position: relative;
+    font: 48px/48px "Roboto", sans-serif;
+    padding: 109px 0 19px 0;
+}
