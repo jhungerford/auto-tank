@@ -14,3 +14,4 @@ Installation / Useful Commands:
 * List i2c devices with `i2cdetect -y 1`
 * Probe i2c devices with `i2cdetect 1` - i2c busses are listed under `ls /dev | grep i2c`.  There's two, but only bus `1` is enabled by default.  Bus `0` requires pullup resistors, since it uses GPIO pins.
 * The `pinout` command lists useful info.
+* `gpio readall` prints the pin numbers for the GPIO header.
