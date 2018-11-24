@@ -1,11 +1,22 @@
 package main
 
+/*
+#cgo LDFLAGS: -lm -lwiringPi
+#include <errno.h>
+#include <wiringPi.h>
+*/
+
+import "C"
 import (
 	"log"
 	"net/http"
+
 )
 
 func main() {
+	status, err := C.wiringPiSetupGpio()
+	log.Printf("wiringPiSetupGpio status: %d\n", status)
+
 	// Start the web server
 	fs := http.FileServer(http.Dir("web"))
 
