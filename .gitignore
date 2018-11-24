@@ -8,5 +8,8 @@
 # Test binary, build with `go test -c`
 *.test
 
+# Application binary
+auto-tank
+
 # IntelliJ
 .idea/
