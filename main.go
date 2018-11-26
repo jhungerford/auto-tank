@@ -36,15 +36,15 @@ type tankTreadDirection struct {
 }
 
 var tankDirectionMap = map[TankDirection]tankTreadDirection{
-	North : tankTreadDirection{Forward, Forward},
-	NorthEast : tankTreadDirection{Forward, Off},
-	East : tankTreadDirection{Forward, Reverse},
-	SouthEast : tankTreadDirection{Off, Reverse},
-	South : tankTreadDirection{Reverse, Reverse},
-	SouthWest : tankTreadDirection{Reverse, Off},
-	West : tankTreadDirection{Reverse, Forward},
-	NorthWest : tankTreadDirection{Off, Forward},
-	Stop : tankTreadDirection{Off, Off},
+	North :     {Forward, Forward},
+	NorthEast : {Forward, Off},
+	East :      {Forward, Reverse},
+	SouthEast : {Off, Reverse},
+	South :     {Reverse, Reverse},
+	SouthWest : {Reverse, Off},
+	West :      {Reverse, Forward},
+	NorthWest : {Off, Forward},
+	Stop :      {Off, Off},
 }
 
 type Pins struct {
