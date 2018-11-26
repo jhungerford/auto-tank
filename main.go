@@ -58,7 +58,7 @@ type Tread struct {
 func (t Tread) init() {
 	for _, pins := range []Pins{t.Front, t.Rear} {
 		for _, pin := range []int{pins.HighPin, pins.LowPin, pins.SpeedPin} {
-			C.pinMode(pin, C.OUTPUT)
+			C.pinMode(C.int(pin), C.OUTPUT)
 		}
 	}
 }
@@ -67,15 +67,15 @@ func (t Tread) move(dir TreadDirection) {
 	for _, pins := range []Pins{t.Front, t.Rear} {
 		switch dir {
 		case Forward:
-			C.digitalWrite(pins.LowPin, 0)
-			C.digitalWrite(pins.HighPin, 1)
-			C.digitalWrite(pins.SpeedPin, 1)
+			C.digitalWrite(C.int(pins.LowPin), 0)
+			C.digitalWrite(C.int(pins.HighPin), 1)
+			C.digitalWrite(C.int(pins.SpeedPin), 1)
 		case Reverse:
-			C.digitalWrite(pins.LowPin, 1)
-			C.digitalWrite(pins.HighPin, 0)
-			C.digitalWrite(pins.SpeedPin, 1)
+			C.digitalWrite(C.int(pins.LowPin), 1)
+			C.digitalWrite(C.int(pins.HighPin), 0)
+			C.digitalWrite(C.int(pins.SpeedPin), 1)
 		case Off:
-			C.digitalWrite(pins.SpeedPin, 0)
+			C.digitalWrite(C.int(pins.SpeedPin), 0)
 		}
 	}
 }
