@@ -11,15 +11,41 @@ import (
 	"net/http"
 )
 
-type Direction int
-
+type TreadDirection int
 const (
-	Forward = Direction(iota)
-	Reverse = Direction(iota)
-	Left    = Direction(iota)
-	Right   = Direction(iota)
-	Stop    = Direction(iota)
+	Forward = TreadDirection(iota)
+	Reverse = TreadDirection(iota)
+	Off     = TreadDirection(iota)
 )
+
+type TankDirection int
+const (
+	North     = TankDirection(iota)
+	NorthEast = TankDirection(iota)
+	East      = TankDirection(iota)
+	SouthEast = TankDirection(iota)
+	South     = TankDirection(iota)
+	SouthWest = TankDirection(iota)
+	West      = TankDirection(iota)
+	NorthWest = TankDirection(iota)
+	Stop      = TankDirection(iota)
+)
+
+type tankTreadDirection struct {
+	left, right TreadDirection
+}
+
+var tankDirectionMap = map[TankDirection]tankTreadDirection{
+	North : tankTreadDirection{Forward, Forward},
+	NorthEast : tankTreadDirection{Forward, Off},
+	East : tankTreadDirection{Forward, Reverse},
+	SouthEast : tankTreadDirection{Off, Reverse},
+	South : tankTreadDirection{Reverse, Reverse},
+	SouthWest : tankTreadDirection{Reverse, Off},
+	West : tankTreadDirection{Reverse, Forward},
+	NorthWest : tankTreadDirection{Off, Forward},
+	Stop : tankTreadDirection{Off, Off},
+}
 
 type Pins struct {
 	HighPin, LowPin, SpeedPin int
@@ -37,7 +63,7 @@ func (t Tread) init() {
 	}
 }
 
-func (t Tread) move(dir Direction) {
+func (t Tread) move(dir TreadDirection) {
 	for _, pins := range []Pins{t.Front, t.Rear} {
 		switch dir {
 		case Forward:
@@ -48,10 +74,8 @@ func (t Tread) move(dir Direction) {
 			C.digitalWrite(pins.LowPin, 1)
 			C.digitalWrite(pins.HighPin, 0)
 			C.digitalWrite(pins.SpeedPin, 1)
-		case Stop:
+		case Off:
 			C.digitalWrite(pins.SpeedPin, 0)
-		default:
-			panic("Invalid tread direction")
 		}
 	}
 }
@@ -65,24 +89,10 @@ func (t Tank) init() {
 	t.Right.init()
 }
 
-func (t Tank) move(direction Direction) {
-	switch direction {
-	case Forward:
-		t.Left.move(Forward)
-		t.Right.move(Forward)
-	case Reverse:
-		t.Left.move(Reverse)
-		t.Right.move(Reverse)
-	case Left:
-		t.Left.move(Reverse)
-		t.Right.move(Forward)
-	case Right:
-		t.Left.move(Forward)
-		t.Right.move(Reverse)
-	case Stop:
-		t.Left.move(Stop)
-		t.Right.move(Stop)
-	}
+func (t Tank) move(direction TankDirection) {
+	treadDirs := tankDirectionMap[direction]
+	t.Left.move(treadDirs.left)
+	t.Right.move(treadDirs.right)
 }
 
 func main() {
@@ -93,17 +103,17 @@ func main() {
 
 	tank := Tank{
 		Tread{
-			Pins{4, 5, 1},
-			Pins{10, 7, 27},
-		},
-		Tread{
 			Pins{7, 0, 23},
 			Pins{2, 3, 24},
+		},
+		Tread{
+			Pins{5, 4, 1},
+			Pins{7, 10, 27},
 		},
 	}
 
 	tank.init()
-	tank.move(Forward)
+	tank.move(North)
 
 	// Start the web server
 	fs := http.FileServer(http.Dir("web"))
