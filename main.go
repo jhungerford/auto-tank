@@ -85,7 +85,6 @@ func (t Tank) move(direction Direction) {
 	}
 }
 
-2
 func main() {
 	_, err := C.wiringPiSetup()
 	if err != nil {
