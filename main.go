@@ -21,10 +21,8 @@ const (
 	Stop    = Direction(iota)
 )
 
-type Pin int
-
 type Pins struct {
-	HighPin, LowPin, SpeedPin Pin
+	HighPin, LowPin, SpeedPin int
 }
 
 type Tread struct {
@@ -33,7 +31,7 @@ type Tread struct {
 
 func (t Tread) init() {
 	for _, pins := range []Pins{t.Front, t.Rear} {
-		for _, pin := range []Pin{pins.HighPin, pins.LowPin, pins.SpeedPin} {
+		for _, pin := range []int{pins.HighPin, pins.LowPin, pins.SpeedPin} {
 			C.pinMode(pin, C.OUTPUT)
 		}
 	}
@@ -87,7 +85,7 @@ func (t Tank) move(direction Direction) {
 	}
 }
 
-
+2
 func main() {
 	_, err := C.wiringPiSetup()
 	if err != nil {
