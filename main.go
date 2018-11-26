@@ -11,43 +11,102 @@ import (
 	"net/http"
 )
 
+type Direction int
+
+const (
+	Forward = Direction(iota)
+	Reverse = Direction(iota)
+	Left    = Direction(iota)
+	Right   = Direction(iota)
+	Stop    = Direction(iota)
+)
+
+type Pin int
+
+type Pins struct {
+	HighPin, LowPin, SpeedPin Pin
+}
+
+type Tread struct {
+	Front, Rear Pins
+}
+
+func (t Tread) init() {
+	for _, pins := range []Pins{t.Front, t.Rear} {
+		for _, pin := range []Pin{pins.HighPin, pins.LowPin, pins.SpeedPin} {
+			C.pinMode(pin, C.OUTPUT)
+		}
+	}
+}
+
+func (t Tread) move(dir Direction) {
+	for _, pins := range []Pins{t.Front, t.Rear} {
+		switch dir {
+		case Forward:
+			C.digitalWrite(pins.LowPin, 0)
+			C.digitalWrite(pins.HighPin, 1)
+			C.digitalWrite(pins.SpeedPin, 1)
+		case Reverse:
+			C.digitalWrite(pins.LowPin, 1)
+			C.digitalWrite(pins.HighPin, 0)
+			C.digitalWrite(pins.SpeedPin, 1)
+		case Stop:
+			C.digitalWrite(pins.SpeedPin, 0)
+		default:
+			panic("Invalid tread direction")
+		}
+	}
+}
+
+type Tank struct {
+	Left, Right Tread
+}
+
+func (t Tank) init() {
+	t.Left.init()
+	t.Right.init()
+}
+
+func (t Tank) move(direction Direction) {
+	switch direction {
+	case Forward:
+		t.Left.move(Forward)
+		t.Right.move(Forward)
+	case Reverse:
+		t.Left.move(Reverse)
+		t.Right.move(Reverse)
+	case Left:
+		t.Left.move(Reverse)
+		t.Right.move(Forward)
+	case Right:
+		t.Left.move(Forward)
+		t.Right.move(Reverse)
+	case Stop:
+		t.Left.move(Stop)
+		t.Right.move(Stop)
+	}
+}
+
+
 func main() {
-	status, err := C.wiringPiSetup()
+	_, err := C.wiringPiSetup()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	log.Printf("wiringPiSetupGpio status: %d\n", status)
+	tank := Tank{
+		Tread{
+			Pins{4, 5, 1},
+			Pins{10, 7, 27},
+		},
+		Tread{
+			Pins{7, 0, 23},
+			Pins{2, 3, 24},
+		},
+	}
 
-	// left side of the tank
-	C.pinMode(4, C.OUTPUT)
-	C.pinMode(5, C.OUTPUT)
-	C.pinMode(10, C.OUTPUT)
-	C.pinMode(7, C.OUTPUT)
-	C.pinMode(1, C.OUTPUT)
-	C.pinMode(27, C.OUTPUT)
-
-	C.digitalWrite(4, 1)
-	C.digitalWrite(5, 0)
-	C.digitalWrite(10, 1)
-	C.digitalWrite(7, 0)
-	C.digitalWrite(1, 1)
-	C.digitalWrite(27, 1)
-
-	// right side
-	C.pinMode(7, C.OUTPUT)
-	C.pinMode(0, C.OUTPUT)
-	C.pinMode(2, C.OUTPUT)
-	C.pinMode(3, C.OUTPUT)
-	C.pinMode(23, C.OUTPUT)
-	C.pinMode(24, C.OUTPUT)
-
-	C.digitalWrite(7, 0)
-	C.digitalWrite(0, 1)
-	C.digitalWrite(2, 0)
-	C.digitalWrite(3, 1)
-	C.digitalWrite(23, 1)
-	C.digitalWrite(24, 1)
+	tank.init()
+	tank.move(Forward)
 
 	// Start the web server
 	fs := http.FileServer(http.Dir("web"))
