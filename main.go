@@ -91,7 +91,7 @@ func (t Tank) init() {
 
 func (t Tank) move(direction TankDirection) {
 	treadDirs := tankDirectionMap[direction]
-//	t.Left.move(treadDirs.left)
+	t.Left.move(treadDirs.left)
 	t.Right.move(treadDirs.right)
 }
 
@@ -103,13 +103,12 @@ func main() {
 
 	tank := Tank{
 		Tread{
-		//	Pins{7, 0, 23},
-			Pins{2, 3, 24},
-			Pins{2, 3, 24},
-		},
-		Tread{
 			Pins{4, 5, 1},
 			Pins{10, 6, 27},
+		},
+		Tread{
+			Pins{0, 7, 23},
+			Pins{22, 21, 24},
 		},
 	}
 
