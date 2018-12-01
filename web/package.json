@@ -1,0 +1,26 @@
+{
+  "name": "auto-tank",
+  "version": "1.0.0",
+  "description": "RaspberryPi powered ProtoTank",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:jhungerford/auto-tank.git"
+  },
+  "author": "John Hungerford",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/jhungerford/auto-tank/issues"
+  },
+  "homepage": "https://github.com/jhungerford/auto-tank#readme",
+  "devDependencies": {
+    "gulp": "^4.0.0",
+    "gulp-typescript": "^5.0.0-alpha.3",
+    "mocha": "^5.2.0",
+    "typescript": "^3.2.1",
+    "webpack": "^4.26.1"
+  }
+}

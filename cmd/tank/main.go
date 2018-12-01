@@ -1,4 +1,4 @@
-package main
+package tank
 
 import (
 	"github.com/jhungerford/auto-tank/tank"

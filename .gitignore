@@ -11,5 +11,8 @@
 # Application binary
 auto-tank
 
+# JavaScript
+node_modules/
+
 # IntelliJ
 .idea/

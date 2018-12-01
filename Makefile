@@ -13,4 +13,3 @@ tank:
 	sudo ./auto-tank
 
 run: clean build tank
-
