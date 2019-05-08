@@ -1,11 +1,13 @@
 package tank
 
-type TreadDirection int
-const (
-	Forward = TreadDirection(iota)
-	Reverse = TreadDirection(iota)
-	Off     = TreadDirection(iota)
-)
+type Tank struct {
+	left, right Tread
+	direction TankDirection
+}
+
+func (t *Tank) Direction() TankDirection {
+	return t.direction
+}
 
 type TankDirection int
 const (
@@ -19,6 +21,31 @@ const (
 	NorthWest = TankDirection(iota)
 	Stop      = TankDirection(iota)
 )
+
+type TreadDirection int
+const (
+	Forward = TreadDirection(iota)
+	Reverse = TreadDirection(iota)
+	Off     = TreadDirection(iota)
+)
+
+
+func New() Tank {
+	return Tank{
+		left: Tread{
+			Front: Pins{HighPin: 4, LowPin: 5, SpeedPin: 1},
+			Rear: Pins{HighPin: 10, LowPin: 6, SpeedPin: 27},
+		},
+		right: Tread{
+			Front: Pins{HighPin: 0, LowPin: 7, SpeedPin: 23},
+			Rear: Pins{HighPin: 22, LowPin: 21, SpeedPin: 24},
+		},
+	}
+}
+
+type Tread interface {
+
+}
 
 type tankTreadDirection struct {
 	left, right TreadDirection
@@ -44,25 +71,6 @@ type Tread struct {
 	Front, Rear Pins
 }
 
-type Tank struct {
+type Treads struct {
 	Left, Right Tread
-}
-
-func New() Tank {
-	return Tank{
-		Left: Tread{
-			Front: Pins{HighPin: 4, LowPin: 5, SpeedPin: 1},
-			Rear: Pins{HighPin: 10, LowPin: 6, SpeedPin: 27},
-		},
-		Right: Tread{
-			Front: Pins{HighPin: 0, LowPin: 7, SpeedPin: 23},
-			Rear: Pins{HighPin: 22, LowPin: 21, SpeedPin: 24},
-		},
-	}
-}
-
-func (t Tank) Move(direction TankDirection) {
-	treadDirs := tankDirectionMap[direction]
-	t.Left.Move(treadDirs.left)
-	t.Right.Move(treadDirs.right)
 }
