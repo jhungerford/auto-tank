@@ -8,6 +8,8 @@ package main
 import "C"
 import (
 	"log"
+	"os"
+	"fmt"
 	"net/http"
 )
 
@@ -113,11 +115,24 @@ func main() {
 	}
 
 	tank.init()
-	tank.move(North)
+	// tank.move(North)
 
 	// Start the web server
 	fs := http.FileServer(http.Dir("web"))
+	h := http.NewServeMux()
+	h.HandleFunc("/api/move", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Move")
+	})
 
-	http.Handle("/", fs)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	h.Handle("/", http.StripPrefix("/", fs))
+
+
+	// fs := http.FileServer(http.Dir("web"))
+
+	// http.Handle("/", fs)
+	// http.HandleFunc("/api/move", func(w http.ResponseWriter, r *http.Request) {
+	// 	fmt.Fprintf(w, "Move")
+	// })
+	fmt.Fprintf(os.Stdout, "Running...")
+	log.Fatal(http.ListenAndServe(":8080", h))
 }
