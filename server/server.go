@@ -2,6 +2,8 @@ package server
 
 import (
 	"github.com/jhungerford/auto-tank/tank"
+	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -30,7 +32,16 @@ func (s *server) routes() {
 
 func (s *server) handleMove() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		(*s.tank).Move("Web")
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			log.Printf("Error reading move body: %v", err)
+			http.Error(w, "Error reading body", http.StatusBadRequest)
+			return
+		}
+
+		(*s.tank).Move(string(body))
+
+		w.WriteHeader(http.StatusNoContent)
 	}
 }
 
