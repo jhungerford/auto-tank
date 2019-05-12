@@ -10,6 +10,6 @@ func Init() Tank {
 	return MockTank{}
 }
 
-func (tank MockTank) Move(direction string) {
-	log.Printf("Mock - move %s\n", direction)
+func (tank MockTank) Move(direction Direction) {
+	log.Printf("Mock - move %v\n", direction)
 }

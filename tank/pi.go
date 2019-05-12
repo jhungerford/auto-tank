@@ -23,6 +23,6 @@ func Init() Tank {
 	return PiTank{}
 }
 
-func (tank PiTank) Move(direction string) {
-	log.Printf("Pi - move %s\n", direction)
+func (tank PiTank) Move(direction Direction) {
+	log.Printf("Pi - move %v\n", direction)
 }

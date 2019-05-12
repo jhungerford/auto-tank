@@ -39,7 +39,14 @@ func (s *server) handleMove() http.HandlerFunc {
 			return
 		}
 
-		(*s.tank).Move(string(body))
+		direction, err := tank.ParseDirection(string(body))
+		if err != nil {
+			log.Printf("Invalid direction from body: %v", err)
+			http.Error(w, "Invalid direction", http.StatusBadRequest)
+			return
+		}
+
+		(*s.tank).Move(direction)
 
 		w.WriteHeader(http.StatusNoContent)
 	}
