@@ -1,3 +1,5 @@
+.PHONY: clean build build-mock mock tank run
+
 default: clean build
 
 clean:
@@ -9,8 +11,12 @@ stop:
 build:
 	go build
 
+build-mock:
+	go build -tags mock
+
+mock: clean build-mock
+
 tank:
 	sudo ./auto-tank
 
 run: clean build tank
-
