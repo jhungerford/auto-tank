@@ -8,11 +8,11 @@ import (
 )
 
 type server struct {
-	tank   *tank.Tank
+	tank   tank.Tank
 	router *http.ServeMux
 }
 
-func Init(tank *tank.Tank) *server {
+func NewServer(tank tank.Tank) *server {
 	s := &server{
 		tank:   tank,
 		router: http.NewServeMux(),
@@ -24,9 +24,7 @@ func Init(tank *tank.Tank) *server {
 }
 
 func (s *server) routes() {
-	fs := http.FileServer(http.Dir("static"))
-
-	s.router.Handle("/", fs)
+	s.router.Handle("/", http.FileServer(http.Dir("static")))
 	s.router.HandleFunc("/move", s.handleMove())
 }
 
@@ -46,7 +44,7 @@ func (s *server) handleMove() http.HandlerFunc {
 			return
 		}
 
-		(*s.tank).Move(direction)
+		s.tank.Move(direction)
 
 		w.WriteHeader(http.StatusNoContent)
 	}

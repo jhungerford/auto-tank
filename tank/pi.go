@@ -12,11 +12,12 @@ import (
 	"log"
 )
 
+// PiTank is a tank implementation connected to actual hardware - it runs the pi.
 type PiTank struct {
 	left, right piTread
 }
 
-func Init() Tank {
+func Init() *Tank {
 	_, err := C.wiringPiSetup()
 	if err != nil {
 		log.Fatal(err)
@@ -36,7 +37,7 @@ func Init() Tank {
 	t.left.init()
 	t.right.init()
 
-	return t
+	return &t
 }
 
 type tankTreadDirection struct {
@@ -51,7 +52,7 @@ var tankDirectionMap = map[TankDirection]tankTreadDirection{
 	Stop:  {Off, Off},
 }
 
-func (tank PiTank) Move(direction TankDirection) {
+func (tank *PiTank) Move(direction TankDirection) {
 	log.Printf("Pi - move %v\n", direction)
 
 	treadDirections := tankDirectionMap[direction]
