@@ -28,8 +28,8 @@ func Init() Tank {
 			rear:  piPins{C.int(10), C.int(6), C.int(27)},
 		},
 		right: piTread{
-			front: piPins(C.int(0), C.int(7), C.int(23)),
-			rear:  piPins(C.int(22), C.int(21), C.int(24)),
+			front: piPins{C.int(0), C.int(7), C.int(23)},
+			rear:  piPins{C.int(22), C.int(21), C.int(24)},
 		},
 	}
 
@@ -69,7 +69,7 @@ type piTread struct {
 
 func (tread piTread) init() {
 	for _, pins := range []piPins{tread.front, tread.rear} {
-		for _, pin := range []int{pins.high, pins.low, pins.speed} {
+		for _, pin := range []C.int{pins.high, pins.low, pins.speed} {
 			C.pinMode(pin, C.OUTPUT)
 		}
 	}
@@ -77,18 +77,18 @@ func (tread piTread) init() {
 
 func (tread piTread) Move(direction TreadDirection) {
 	// TODO: throttle speed - switch from a digital 1 or 0 to a PWM range
-	for _, pins := range []Pins{tread.front, tread.rear} {
+	for _, pins := range []piPins{tread.front, tread.rear} {
 		switch direction {
 		case Forward:
-			C.digitalWrite(pins.lowPin, 0)
-			C.digitalWrite(pins.highPin, 1)
-			C.digitalWrite(pins.speedPin, 1)
+			C.digitalWrite(pins.low, 0)
+			C.digitalWrite(pins.high, 1)
+			C.digitalWrite(pins.speed, 1)
 		case Reverse:
-			C.digitalWrite(pins.lowPin, 1)
-			C.digitalWrite(pins.highPin, 0)
-			C.digitalWrite(pins.speedPin, 1)
+			C.digitalWrite(pins.low, 1)
+			C.digitalWrite(pins.high, 0)
+			C.digitalWrite(pins.speed, 1)
 		case Off:
-			C.digitalWrite(pins.SpeedPin, 0)
+			C.digitalWrite(pins.speed, 0)
 		}
 	}
 }
