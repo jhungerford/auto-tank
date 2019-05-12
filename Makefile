@@ -9,6 +9,9 @@ stop:
 build:
 	go build
 
+build-mock:
+    go build -tags mock
+
 tank:
 	sudo ./auto-tank
 
