@@ -9,7 +9,7 @@ import (
 
 func main() {
 	var t = tank.Init()
-	var s = server.Init(&t)
+	var s = server.NewServer(t)
 
 	log.Fatal(http.ListenAndServe(":8080", s))
 }
